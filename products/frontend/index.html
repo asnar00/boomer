@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Boomer Testbed</title>
+    <style>
+        body { font-family: monospace; padding: 20px; }
+        #status { margin: 20px 0; }
+        #controls { margin: 20px 0; }
+        #controls button { margin-right: 10px; padding: 10px 20px; font-size: 16px; }
+        #position { font-size: 18px; margin-left: 20px; }
+        #sources { margin: 20px 0; }
+        .source-btn { margin-right: 10px; padding: 10px 20px; font-size: 16px; }
+        .source-btn.active { background: #333; color: white; }
+    </style>
+</head>
+<body>
+    <h1>Boomer Testbed</h1>
+    <div id="status">Connecting...</div>
+    <div id="controls">
+        <button id="skip-back">-10s</button>
+        <button id="play-pause">Play</button>
+        <button id="skip-forward">+10s</button>
+        <span id="position">0:00 / 0:00</span>
+    </div>
+    <div id="sources">
+        <button id="source-ref" class="source-btn active">ref</button>
+        <button id="source-room" class="source-btn">room</button>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>

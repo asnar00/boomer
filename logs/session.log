@@ -1,0 +1,48 @@
+[12:15:06.845] [backend] [system] Logging initialized
+[12:15:06.879] [backend] [audio] Loaded ref.wav: 333.7s
+[12:15:06.879] [backend] [audio] Loaded room.wav: 333.7s
+[12:15:07.605] [backend] [ws] Client connected
+[12:15:07.607] [frontend] [ws] Connected to backend
+[12:15:07.608] [frontend] [ws] Received: audio_loaded
+[12:15:45.656] [backend] [remote] Refresh all clients
+[12:15:45.657] [frontend] [ws] Received: remote_refresh
+[12:15:45.657] [frontend] [remote] Refreshing page
+[12:15:45.685] [backend] [ws] Client connected
+[12:15:45.685] [frontend] [ws] Connected to backend
+[12:15:45.685] [frontend] [ws] Received: audio_loaded
+[12:15:52.176] [backend] [transport] Play from 0.0s
+[12:15:54.240] [backend] [transport] Source: room
+[12:15:56.281] [backend] [transport] Source: ref
+[12:15:57.451] [backend] [transport] Pause at 5.2s
+[12:16:26.300] [backend] [transport] Play from 5.2s
+[12:16:26.304] [frontend] [ui] Play clicked
+[12:16:58.102] [backend] [transport] Source: room
+[12:16:58.104] [frontend] [ui] Source: room
+[12:17:01.454] [backend] [transport] Source: ref
+[12:17:01.456] [frontend] [ui] Source: ref
+[12:17:10.781] [backend] [transport] Seek to 39.7s
+[12:17:10.782] [frontend] [ui] Skip back clicked
+[12:17:11.395] [backend] [transport] Source: room
+[12:17:11.396] [frontend] [ui] Source: room
+[12:17:38.692] [backend] [transport] Source: ref
+[12:17:38.693] [frontend] [ui] Source: ref
+[12:17:41.395] [backend] [transport] Source: room
+[12:17:41.396] [frontend] [ui] Source: room
+[12:17:44.733] [backend] [transport] Source: ref
+[12:17:44.734] [frontend] [ui] Source: ref
+[12:17:47.028] [backend] [transport] Pause at 75.8s
+[12:17:47.030] [frontend] [ui] Pause clicked
+[12:17:47.878] [backend] [transport] Seek to 65.8s
+[12:17:47.879] [frontend] [ui] Skip back clicked
+[12:17:48.055] [backend] [transport] Seek to 55.8s
+[12:17:48.057] [frontend] [ui] Skip back clicked
+[12:17:48.229] [backend] [transport] Seek to 45.8s
+[12:17:48.231] [frontend] [ui] Skip back clicked
+[12:17:48.417] [backend] [transport] Seek to 35.8s
+[12:17:48.419] [frontend] [ui] Skip back clicked
+[12:17:48.608] [backend] [transport] Seek to 25.8s
+[12:17:48.609] [frontend] [ui] Skip back clicked
+[12:17:48.780] [backend] [transport] Seek to 15.8s
+[12:17:48.781] [frontend] [ui] Skip back clicked
+[12:17:48.975] [backend] [transport] Seek to 5.8s
+[12:17:48.976] [frontend] [ui] Skip back clicked
