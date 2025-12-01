@@ -2,8 +2,11 @@
 <html>
 <head>
     <title>Boomer Testbed</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <style>
-        body { font-family: monospace; padding: 20px; }
+        body { font-family: monospace; padding: 20px; touch-action: manipulation; }
+        html { touch-action: manipulation; }
+        * { touch-action: manipulation; }
         #status { margin: 20px 0; }
         #controls { margin: 20px 0; }
         #controls button { margin-right: 10px; padding: 10px 20px; font-size: 16px; }
@@ -11,6 +14,23 @@
         #sources { margin: 20px 0; }
         .source-btn { margin-right: 10px; padding: 10px 20px; font-size: 16px; }
         .source-btn.active { background: #333; color: white; }
+        /* testbed/metering */
+        #meter-tabs { margin: 20px 0; }
+        #meter-tabs button { margin-right: 5px; padding: 8px 16px; }
+        #meter-tabs button.active { background: #333; color: white; }
+        #meter-views { margin: 10px 0; display: flex; align-items: center; gap: 10px; }
+        .view-btn { padding: 6px 12px; font-size: 14px; }
+        .view-btn.active { background: #333; color: white; }
+        #meter-views select { padding: 6px; font-size: 14px; }
+        #meter-display { margin: 20px 0; }
+        #meter-canvas { border: 1px solid #ccc; touch-action: none; }
+        #zoom-controls { margin: 10px 0; }
+        #zoom-controls button { padding: 8px 16px; font-size: 16px; margin-right: 5px; }
+        #meter-diff { margin-top: 10px; font-size: 16px; }
+        /* testbed/metering/history/diff-view */
+        #diff-controls { margin: 10px 0; display: flex; align-items: center; gap: 20px; }
+        #diff-controls label { display: flex; align-items: center; gap: 5px; }
+        #diff-tolerance { width: 100px; }
     </style>
 </head>
 <body>
@@ -25,7 +45,47 @@
     <div id="sources">
         <button id="source-ref" class="source-btn active">ref</button>
         <button id="source-room" class="source-btn">room</button>
+        <button id="source-processed" class="source-btn">processed</button>
     </div>
-    <script src="app.js"></script>
+    <!-- testbed/metering -->
+    <div id="meter-tabs">
+        <!-- tabs populated by JS -->
+    </div>
+    <div id="meter-views">
+        <span id="playing-source">Playing: ref</span>
+        <span style="margin-left: 20px;">Compare to:</span>
+        <select id="compare-source">
+            <option value="">none</option>
+            <option value="ref">ref</option>
+            <option value="room">room</option>
+            <option value="processed">processed</option>
+        </select>
+    </div>
+    <div id="meter-display">
+        <canvas id="meter-canvas" width="800" height="300"></canvas>
+        <div id="zoom-controls">
+            <button id="zoom-out">-</button>
+            <button id="zoom-reset">Reset</button>
+            <button id="zoom-in">+</button>
+        </div>
+        <!-- testbed/metering/history/diff-view -->
+        <div id="diff-controls">
+            <label>
+                <input type="checkbox" id="diff-view-toggle" checked> Diff View
+            </label>
+            <label>
+                Tolerance: <input type="range" id="diff-tolerance" min="1" max="10" value="1">
+                <span id="diff-tolerance-value">1</span>dB
+            </label>
+        </div>
+        <div id="meter-diff"></div>
+    </div>
+    <script>
+    // Prevent Safari zoom BEFORE any other scripts load
+    document.addEventListener('gesturestart', function(e) { e.preventDefault(); }, true);
+    document.addEventListener('gesturechange', function(e) { e.preventDefault(); }, true);
+    document.addEventListener('gestureend', function(e) { e.preventDefault(); }, true);
+</script>
+<script src="app.js"></script>
 </body>
 </html>

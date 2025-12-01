@@ -1,4 +1,4 @@
-# testbed/transport, testbed/source-switch
+# testbed/transport, testbed/source-switch, testbed/processor
 
 import sounddevice as sd
 import numpy as np
@@ -7,6 +7,7 @@ import time
 from audio import audio_sources
 from state import state, broadcast_state
 from logger import log
+import processor
 
 # playback state
 stream = None
@@ -19,16 +20,25 @@ crossfade_from_audio = None
 CROSSFADE_MS = 15  # milliseconds
 
 def get_current_audio():
+    # For processed source, ensure data is processed before returning
+    if state.source == 'processed':
+        return audio_sources['processed'].data
     return audio_sources[state.source].data
 
 def audio_callback(outdata, frames, time_info, status):
     global playback_position, crossfade_samples, crossfade_from_audio
 
-    audio = get_current_audio()
-
     with playback_lock:
         start = playback_position
         end = start + frames
+
+    # testbed/processor - ensure processed data is ready before playback
+    if state.source == 'processed':
+        processor.process_chunk(start, end)
+
+    audio = get_current_audio()
+
+    with playback_lock:
 
         if end >= len(audio):
             # reached end of audio
@@ -142,7 +152,7 @@ def seek(position_seconds):
 def switch_source(new_source):
     global crossfade_samples, crossfade_from_audio
 
-    if new_source not in ['ref', 'room']:
+    if new_source not in ['ref', 'room', 'processed']:
         return
     if new_source == state.source:
         return

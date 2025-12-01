@@ -1,4 +1,4 @@
-# testbed/load-audio, testbed/logging, testbed/remote-control, testbed/transport
+# testbed/load-audio, testbed/logging, testbed/remote-control, testbed/transport, testbed/metering, testbed/processor
 
 from flask import Flask, request, jsonify
 from flask_sock import Sock
@@ -7,6 +7,9 @@ from audio import load_audio_files, audio_sources
 from logger import init_logging, log
 from state import state, connected_clients, get_state_dict, broadcast_state
 from playback import start_playback, stop_playback, seek, start_position_thread, switch_source
+from meters import start_metering_thread, subscribe, unsubscribe, client_disconnected, register_measurement, get_meter_history, load_history_from_disk, save_history_to_disk, export_meter_csv
+from measurements import register_all
+import processor
 
 app = Flask(__name__, static_folder='../frontend', static_url_path='')
 sock = Sock(app)
@@ -60,6 +63,14 @@ def websocket(ws):
         if data['type'] == 'source':
             switch_source(data['name'])
 
+        # testbed/metering
+        if data['type'] == 'meter_subscribe':
+            subscribe(ws, data['name'])
+        if data['type'] == 'meter_unsubscribe':
+            unsubscribe(ws, data['name'])
+
+    # testbed/metering - cleanup on disconnect
+    client_disconnected(ws)
     connected_clients.remove(ws)
     log('ws', 'Client disconnected')
 
@@ -128,11 +139,30 @@ def api_client_refresh():
             pass
     return jsonify({'status': 'ok'})
 
+# testbed/metering/history/persistence - export API
+@app.route('/api/meter/export')
+def api_meter_export():
+    meter = request.args.get('meter', 'spectrum')
+    start = float(request.args.get('start', 0))
+    end = float(request.args.get('end', 60))
+    filepath = request.args.get('file', 'meter_export.csv')
+
+    success = export_meter_csv(meter, start, end, filepath)
+    if success:
+        return jsonify({'status': 'ok', 'file': filepath})
+    else:
+        return jsonify({'status': 'error', 'message': 'No data in range'}), 404
+
 if __name__ == '__main__':
     init_logging()
     load_audio_files()
+    processor.init_processor()  # testbed/processor
     state.duration = audio_sources['ref'].duration
     log('audio', f"Loaded ref.wav: {audio_sources['ref'].duration:.1f}s")
     log('audio', f"Loaded room.wav: {audio_sources['room'].duration:.1f}s")
     start_position_thread()
+    # testbed/metering
+    register_all(register_measurement)
+    load_history_from_disk()  # testbed/metering/history/persistence
+    start_metering_thread()
     app.run(debug=True, port=5000, threaded=True)
